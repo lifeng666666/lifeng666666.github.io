@@ -6,12 +6,12 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://lifeng666666.xyz">
-  <title>Archives: 2017/11 | 李峰的博客</title>
+  <title>李峰的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="这里是 lifeng666666.xyz 一部分">
 <meta property="og:type" content="website">
 <meta property="og:title" content="李峰的博客">
-<meta property="og:url" content="http://lifeng666666.xyz/archives/2017/11/index.html">
+<meta property="og:url" content="http://lifeng666666.xyz/page/3/index.html">
 <meta property="og:site_name" content="李峰的博客">
 <meta property="og:description" content="这里是 lifeng666666.xyz 一部分">
 <meta property="og:locale" content="zh-CN">
@@ -159,232 +159,358 @@
           <div id="js-content" class="content-ll">
             
   
-  
+    <article id="post-06" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Ajax发送post请求"><a href="#Ajax发送post请求" class="headerlink" title="Ajax发送post请求"></a>Ajax发送post请求</h1><p>发送POST请求的注意点：</p>
+<pre><code>（1）请求方法为post
+（2）把要提交的参数放在send方法中处理
+（3）必须设置请求头信息
+    xhr.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;);
+</code></pre><p><strong>封装好的代码示例</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// 数据处理方法</div><div class="line">function json2str(data) &#123;</div><div class="line">    var arr = [];</div><div class="line">    for(var key in data)&#123;</div><div class="line">        arr.push(key+&quot;=&quot;+data[key]);</div><div class="line">    &#125;</div><div class="line">    // 不能直接将中文提交给服务器, 中文需要编码之后再提交</div><div class="line">    return encodeURI(arr.join(&quot;&amp;&quot;));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">// 发送请求方法</div><div class="line">// function myAjax(type, url, data,timeout,success, error) &#123;</div><div class="line">function myAjax(option) &#123;</div><div class="line"></div><div class="line">    // -1.默认值处理</div><div class="line">    option.type = option.type || &quot;get&quot;;</div><div class="line">    option.timeout = option.timeout || 15;</div><div class="line"></div><div class="line">    // 0.对参数进行处理</div><div class="line">    var res = json2str(option.data);</div><div class="line"></div><div class="line">    // 1.创建异步对象</div><div class="line">    if(window.XMLHttpRequest)&#123;</div><div class="line">        var xhr = new XMLHttpRequest();</div><div class="line">    &#125;else&#123;</div><div class="line">        var xhr = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);</div><div class="line">    &#125;</div><div class="line">    if(option.type == &quot;get&quot;)&#123;</div><div class="line">        // 2.设置URL</div><div class="line">        xhr.open(option.type, option.url+&quot;?&quot;+res, true);</div><div class="line">        // 3.发送请求</div><div class="line">        xhr.send();</div><div class="line">    &#125;else&#123;</div><div class="line">        // 2.设置URL</div><div class="line">        xhr.open(option.type, option.url, true);</div><div class="line">        xhr.setRequestHeader(&quot;Content-type&quot;,&quot;application/x-www-form-urlencoded&quot;);</div><div class="line">        // 3.发送请求</div><div class="line">        xhr.send(res);</div><div class="line">    &#125;</div><div class="line">    // 4.监听状态</div><div class="line">    xhr.onreadystatechange = function () &#123;</div><div class="line">        // 5.处理返回结果</div><div class="line">        if(xhr.readyState == 4)&#123;</div><div class="line">            // 清空定时器</div><div class="line">            clearTimeout(timer);</div><div class="line">            if(xhr.status &gt;= 200 &amp;&amp;</div><div class="line">                xhr.status &lt; 300 ||</div><div class="line">                xhr.status == 304)&#123;</div><div class="line">                option.success(xhr);</div><div class="line">            &#125;else&#123;</div><div class="line">                option.error(xhr.status);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    // 6.对超时时间处理</div><div class="line">    if(!option.timeout)&#123;</div><div class="line">        return;</div><div class="line">    &#125;</div><div class="line">    var timer = setTimeout(function () &#123;</div><div class="line">        alert(&quot;超时了&quot;);</div><div class="line">        // 中断请求</div><div class="line">        xhr.abort();</div><div class="line">    &#125;, option.timeout);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/gitbook/plugins/gitbook-plugin-mathjax/plugin/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.718Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/06/06/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/gitbook/style/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.393Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Ajax发送get请求"><a href="#Ajax发送get请求" class="headerlink" title="Ajax发送get请求"></a>Ajax发送get请求</h1><p><strong>简单介绍</strong></p>
+<pre><code>Ajax是一门异步的用于发送网络请求的技术。
+全称为：Async javascript and XML
+UI刷新：通常情况下，每次提交表达的时候，都会刷新界面，而使用ajax发送请求可以实现异步发送请求获取数据而不刷新界面效果。
+
+具体示例：
+
+a.蘑菇街加载数据，页面的内容在不断的加载，但是整个页面并没有刷新。
+b.百度搜索框输入关键字，页面内容发生了变化，但是整个页面也没有刷新。
+以上都是应用ajax技术来实现的。
+
+具体说明：Ajax 这个概念是由 Jesse James Garrett 在 2005 年发明的。它本身不是单一技术,是一串技术的集合。
+
+Ajax的优点:
+    1）不需要插件支持(一般浏览器且默认开启 JavaScript 即可);
+    2）用户体验极佳(不刷新页面即可获取可更新的数据);
+    3）提升 Web 程序的性能(在传递数据的时候不必整体提交);
+    4）减轻服务器和带宽的负担(将服务器的一些操作转移到客户端);
+
+Ajax 的不足：
+    1）不同版本的浏览器度 XMLHttpRequest 对象支持度不足(比如 IE5 之前);
+    2）前进、后退的功能被破坏(因为 Ajax 永远在当前页,不会几率前后页面);
+    3）搜索引擎的支持度不够(搜索引擎爬虫还不能理解 JS引起变化数据的内容);
+    4）开发调试工具缺乏
+</code></pre><p><strong>使用Ajax发送网络请求的基本步骤</strong></p>
+<pre><code>01 创建异步对象（XMLHTTPRequest），存在兼容性问题
+02 请求请求路径（open）
+03 发送请求（send）
+04 监听请求的状态（onreadystatechange）
+05 处理请求结果
+
+onreadystatechange的几种状态：
+（1）请求未初始化 - 0
+（2）服务器连接已经建立 - 1
+（3）请求已经接收 -2
+（4）请求处理中 -3
+（5）请求已经完成，且响应已经就绪 -4
+
+处理请求结果
+（1）当请求完成的时候再进行处理，即readyState == 4
+（2）通过响应码判断只有请求成功的时候才进行处理，即响应码&gt;=200,&lt;300或者是=304（缓存）
+（3）拿到服务器返回的响应体：response.Text
+
+
+创建请求对象的兼容性处理：
+if（window.XMLHTTPRequest）
+{
+    var request = new XMLHTTPRequest();
+}else
+{
+    var request = new ActiveXObject(&quot;Microsoft&quot;,&quot;XMLHTTP&quot;);
+}
+</code></pre><p><strong>使用Ajax发送网络请求代码示例</strong></p>
+<p><strong>缓存处理</strong></p>
+<pre><code>在IE浏览器中（7），如果发送的是GET请求，那么只要URL没有发生变化，那么IE浏览器就会认为网页的内容也没有发生变化，因此会优先使用缓存数据，所以如果在IE浏览器中想让数据实时更新（获取到最新的数据），那么可以让每次请求的URL都不一样（即每次请求的URL地址不一样）。
+
+在开发中可以使用随机数因子或者是时间戳来添加一个额外的参数给url路径。
+（1）获取时间戳：var date = new Date();date.valueOf()
+（2）获取随机数因子 Math.radom()
+
+说明：
+为url添加随机数或者是时间戳的目的在于让每次请求的时候url的内容都不一样
+参数变化唯一的作用就是让每次发送网络请求的时候URL都不相同，以让服务器总是把最新的数据返回。
+</code></pre><p><strong>代码示例</strong></p>
+<pre><code>// 数据处理方法
+function json2str(data) {
+    var arr = [];
+    for(var key in data){
+        arr.push(key+&quot;=&quot;+data[key]);
+    }
+    // 不能直接将中文提交给服务器, 中文需要编码之后再提交
+    return encodeURI(arr.join(&quot;&amp;&quot;));
+}
+
+// 发送请求方法
+function myAjax(url, data,timeout,success, error) {
+    // 0.对参数进行处理
+    var res = json2str(data);
+
+// 1.创建异步对象
+if(window.XMLHttpRequest){
+    var xhr = new XMLHttpRequest();
+}else{
+    var xhr = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+}
+// 2.设置URL
+xhr.open(&quot;get&quot;, url+&quot;?&quot;+res, true);
+// 3.发送请求
+xhr.send();
+// 4.监听状态
+xhr.onreadystatechange = function () {
+    // 5.处理返回结果
+    if(xhr.readyState == 4){
+        // 清空定时器
+        clearTimeout(timer);
+        if(xhr.status &gt;= 200 &amp;&amp;
+            xhr.status &lt; 300 ||
+            xhr.status == 304){
+            success(xhr.responseText);
+        }else{
+            error(xhr.status);
+        }
+    }
+}
+// 6.对超时时间处理
+var timer = setTimeout(function () {
+    alert(&quot;超时了&quot;);
+    // 中断请求
+    xhr.abort();
+}, timeout);
+</code></pre><p>}</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/06/05/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/gitbook/print/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.384Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-11.05" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/05/11.05/">Web_study</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/05/11.05/" class="archive-article-date">
+  	<time datetime="2017-11-05T07:52:49.054Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="学习资料："><a href="#学习资料：" class="headerlink" title="学习资料："></a>学习资料：</h2><h3 id="by-lifeng"><a href="#by-lifeng" class="headerlink" title="by lifeng"></a>by lifeng</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ 这是我最近学习的网站：</div><div class="line">  w3cschool:http://www.w3school.com.cn/</div><div class="line">  菜鸟教程:http://www.runoob.com/</div><div class="line">  my github:https://github.com/lifeng666666</div><div class="line">  bootcss:http://www.bootcss.com/</div><div class="line">  廖雪峰官网:https://www.liaoxuefeng.com/</div><div class="line">  慕课网学习:http://www.imooc.com/article</div></pre></td></tr></table></figure>
+<p>请关注：<a href="http://lifeng666666.xyz/">my block</a></p>
+<h3 id="在git中更改hexo内容"><a href="#在git中更改hexo内容" class="headerlink" title="在git中更改hexo内容"></a>在git中更改hexo内容</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ hexo clean == hexo clean</div><div class="line">  hexo g == hexo generate</div><div class="line">  hexo s == hexo server</div><div class="line">  hexo d == hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="http://life.youmeek.com/2016/02/28/2016/02/Hexo/" target="_blank" rel="external">found</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/05/11.05/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/gitbook/app/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.382Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/02/hello-world/">Hello World</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/02/hello-world/" class="archive-article-date">
+  	<time datetime="2017-11-02T12:57:52.209Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/02/hello-world/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/search_index/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.346Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/index/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.329Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+        
+        
+    </div>
+</aside>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/glossary_index/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.326Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/GLOSSARY/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.307Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/05/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.304Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/11/07/网页版本/04/" class="archive-article-date">
-  	<time datetime="2017-11-07T10:37:54.300Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-07</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
-  
-
-    
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2017/11/page/2/">2</a><a class="page-number" href="/archives/2017/11/page/3/">3</a><a class="extend next" rel="next" href="/archives/2017/11/page/2/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
     </nav>
   
 
@@ -408,9 +534,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: false,
+		isHome: true,
 		isPost: false,
-		isArchive: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
